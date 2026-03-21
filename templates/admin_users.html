@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Registered Users</h2>
+<form method="GET" class="d-flex mb-3" action="{{ url_for('admin_users') }}">
+    <input type="text" name="query" class="form-control me-2" placeholder="Search by name or email" value="{{ query }}">
+    <button type="submit" class="btn btn-outline-primary">Search</button>
+</form>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Pincode</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.address }}</td>
+            <td>{{ user.pincode }}</td>
+            <td>
+                {% if active_status[user.id] %}
+                    <button class="btn btn-danger btn-sm" disabled>Active Spot</button>
+                {% else %}
+                    {% if session['role'] == 'admin' %}
+                    <form action="{{ url_for('delete_user', user_id=user.id) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                    {% endif %}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

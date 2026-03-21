@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Reservation Summary</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Lot</th>
+            <th>Spot ID</th>
+            <th>Vehicle</th>
+            <th>Parked</th>
+            <th>Released</th>
+            <th>Cost</th>
+            <th>Feedback</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in reservations %}
+        <tr>
+            <td>{{ r.spot.lot.name }}</td>
+            <td>{{ r.spot.id }}</td>
+            <td>{{ r.vehicle_number }}</td>
+            <td>{{ r.parking_time.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ r.release_time.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>₹{{ r.cost or '—' }}</td>
+            <td>
+                {% if r.rating %}
+                    {{ r.rating }} ★
+                {% else %}
+                    <form method="POST" action="{{ url_for('submit_rating', reservation_id=r.id) }}">
+                        <select name="rating" class="form-select form-select-sm" style="width: auto;" required>
+                        <option disabled selected>Select</option>
+                        <option value="0.5">0.5 ★</option>
+                        <option value="1.0">1 ★</option>
+                        <option value="1.5">1.5 ★</option>
+                        <option value="2.0">2 ★</option>
+                        <option value="2.5">2.5 ★</option>
+                        <option value="3.0">3 ★</option>
+                        <option value="3.5">3.5 ★</option>
+                        <option value="4.0">4 ★</option>
+                        <option value="4.5">4.5 ★</option>
+                        <option value="5.0">5 ★</option>
+                        </select>
+                            <button type="submit" class="btn btn-sm btn-primary mt-1">Rate</button>
+                    </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

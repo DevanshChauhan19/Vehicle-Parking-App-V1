@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>User Feedback</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Vehicle</th>
+            <th>Lot</th>
+            <th>Spot</th>
+            <th>Rating</th>
+            <th>Parking Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fb in feedbacks %}
+        <tr>
+            <td>{{ fb.user.name }}</td>
+            <td>{{ fb.vehicle_number }}</td>
+            <td>{{ fb.spot.lot.name }}</td>
+            <td>{{ fb.spot.id }}</td>
+            <td>{{ fb.rating }}</td>
+            <td>{{ fb.parking_time.strftime('%Y-%m-%d %H:%M') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

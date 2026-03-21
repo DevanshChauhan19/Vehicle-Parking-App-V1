@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Parking Spots in Lot: {{ lot.name }}</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Spot ID</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for spot in lot.spots %}
+        <tr>
+            <td>{{ spot.id }}</td>
+            <td>
+                {% if spot.status == 'A' %}
+                    <span class="text-success">Available</span>
+                {% else %}
+                    <span class="text-danger">Occupied</span>
+                {% endif %}
+            </td>
+            <td>
+                <td>
+                    {% if spot.status == 'A' %}
+                        {% if session['role'] == 'admin' %}
+                            <a href="{{ url_for('delete_spot', spot_id=spot.id) }}" class="btn btn-danger btn-sm">Delete</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ url_for('spot_details', spot_id=spot.id) }}" class="btn btn-info btn-sm">View Details</a>
+                    {% endif %}
+                </td>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

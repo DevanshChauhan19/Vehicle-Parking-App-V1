@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Occupied Spot Details</h2>
+
+<table class="table table-striped">
+    <tr>
+        <th>Spot ID</th>
+        <td>{{ spot.id }}</td>
+    </tr>
+    <tr>
+        <th>Lot ID</th>
+        <td>{{ spot.lot_id }}</td>
+    </tr>
+    <tr>
+        <th>Status</th>
+        <td><span class="text-danger">Occupied</span></td>
+    </tr>
+    {% if reservation %}
+    <tr>
+        <th>User ID</th>
+        <td>{{ reservation.user_id }}</td>
+    </tr>
+    <tr>
+        <th>User Name</th>
+        <td>{{ reservation.user.name }}</td>
+    </tr>
+    <tr>
+        <th>Vehicle Number</th>
+        <td>{{ reservation.vehicle_number }}</td>
+    </tr>
+    <tr>
+        <th>Parking Time</th>
+        <td>{{ reservation.parking_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+    </tr>
+    <tr>
+        <th>Release Time</th>
+        <td>
+            {% if reservation.release_time %}
+                {{ reservation.release_time.strftime('%Y-%m-%d %H:%M:%S') }}
+            {% else %}
+                <span class="text-warning">Not yet released</span>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>Cost</th>
+        <td>₹{{ reservation.cost or '—' }}</td>
+    </tr>
+    {% endif %}
+</table>
+
+<a href="{{ url_for('view_lot_spots', lot_id=spot.lot_id) }}" class="btn btn-secondary">Back</a>
+{% endblock %}

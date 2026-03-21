@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Admin Summary</h2>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <h5>Revenue from Each Parking Lot</h5>
+        <canvas id="revenueChart"></canvas>
+    </div>
+    <div class="col-md-6">
+        <h5>Available vs. Occupied Parking Spots</h5>
+        <canvas id="statusChart"></canvas>
+    </div>
+</div>
+
+<div class="mt-5">
+    <h5>Average Ratings per Parking Lot</h5>
+    <canvas id="ratingChart" width="400" height="200"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Chart 1: Revenue per lot (doughnut)
+    new Chart(document.getElementById('revenueChart'), {
+        type: 'doughnut',
+        data: {
+            labels: {{ labels | tojson }},
+            datasets: [{
+                data: {{ revenues | tojson }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)'
+                ],
+                borderColor: 'rgba(255, 255, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+
+    // Chart 2: Available vs. Occupied (bar)
+    new Chart(document.getElementById('statusChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Available', 'Occupied'],
+            datasets: [{
+                label: 'Spot Count',
+                data: [{{ available_spots }}, {{ occupied_spots }}],
+                backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(255, 99, 132, 0.6)'],
+                borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Chart 3: Average Ratings per Lot
+    new Chart(document.getElementById('ratingChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ lot_data | map(attribute='name') | list | tojson }},
+            datasets: [{
+                label: 'Average Rating',
+                data: {{ lot_data | map(attribute='avg_rating') | list | tojson }},
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 5
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

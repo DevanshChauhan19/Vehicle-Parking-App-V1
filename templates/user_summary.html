@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-center">User Summary</h2>
+
+<!-- Chart 1: Reservations -->
+<div class="chart-container">
+    <h4 class="text-center">Total Reservations Per Parking Lot</h4>
+    <canvas id="reservationsChart"></canvas>
+</div>
+
+<!-- Chart 2: Ratings -->
+<div class="chart-container">
+    <h4 class="text-center">Average Ratings Per Parking Lot</h4>
+    <canvas id="ratingsChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const resCtx = document.getElementById('reservationsChart').getContext('2d');
+new Chart(resCtx, {
+    type: 'bar',
+    data: {
+        labels: {{ lot_labels | tojson }},
+        datasets: [{
+            label: 'Reservations',
+            data: {{ lot_counts | tojson }},
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: { stepSize: 1 }
+            }
+        }
+    }
+});
+
+const rateCtx = document.getElementById('ratingsChart').getContext('2d');
+new Chart(rateCtx, {
+    type: 'bar',
+    data: {
+        labels: {{ rating_labels | tojson }},
+        datasets: [{
+            label: 'Average Rating',
+            data: {{ rating_values | tojson }},
+            backgroundColor: 'rgba(255, 206, 86, 0.6)',
+            borderColor: 'rgba(255, 206, 86, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 5
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

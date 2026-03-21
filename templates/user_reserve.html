@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Reserve a Spot</h2>
+
+<form method="POST">
+    <div class="mb-3">
+        <label for="vehicle_number" class="form-label">Enter Vehicle Number</label>
+        <input type="text" name="vehicle_number" id="vehicle_number" class="form-control" placeholder="e.g., MH12AB1234" required>
+    </div>
+    <button type="submit" class="btn btn-success">Reserve Spot</button>
+</form>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>All Reservations</h2>
+<form method="GET" class="mb-3">
+    <div class="input-group">
+        <label class="input-group-text" for="filter">Filter:</label>
+        <select name="status" id="filter" class="form-select" onchange="this.form.submit()">
+            <option value="all" {% if filter_status == 'all' %}selected{% endif %}>All</option>
+            <option value="active" {% if filter_status == 'active' %}selected{% endif %}>Active</option>
+            <option value="completed" {% if filter_status == 'completed' %}selected{% endif %}>Completed</option>
+        </select>
+    </div>
+</form>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Lot</th>
+            <th>Spot ID</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Cost (₹)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for res in reservations %}
+        <tr>
+            <td>{{ res.user.name }}</td>
+            <td>{{ res.spot.lot.name }}</td>
+            <td>{{ res.spot.id }}</td>
+            <td>{{ res.parking_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>
+                {% if res.release_time %}
+                    {{ res.release_time.strftime('%Y-%m-%d %H:%M:%S') }}
+                {% else %}
+                    <span class="text-warning">Active</span>
+                {% endif %}
+            </td>
+            <td>{{ res.cost if res.cost else '-' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

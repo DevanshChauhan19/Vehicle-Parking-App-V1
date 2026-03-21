@@ -1,0 +1,18 @@
+body {
+    background-color: #f8f9fa;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.chart-container {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto 40px auto;
+}
+
+.chart-container canvas {
+    height: 300px !important;
+    width: 100% !important;
+}
